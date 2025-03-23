@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Born on Earth Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+            display: inline-block;
+        }
+
+        #result p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Born on Earth Simulator</h1>
+        <button id="generateButton">Generate</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Helper function to select a random item based on weighted probabilities
+        function weightedRandom(items, weights) {
+            const totalWeight = weights.reduce((acc, weight) => acc + weight, 0);
+            const randomNum = Math.random() * totalWeight;
+            let weightSum = 0;
+
+            for (let i = 0; i < items.length; i++) {
+                weightSum += weights[i];
+                if (randomNum < weightSum) {
+                    return items[i];
+                }
+            }
+        }
+
+        document.getElementById('generateButton').addEventListener('click', function() {
+            // Data for random generation
+            const continents = ['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'];
+            const countries = {
+                Africa: [
+                    { name: 'Nigeria', weight: 20 }, // More populous countries have higher weights
+                    { name: 'Egypt', weight: 10 },
+                    { name: 'South Africa', weight: 8 },
+                    { name: 'Kenya', weight: 6 },
+                    { name: 'Ethiopia', weight: 12 }
+                ],
+                Asia: [
+                    { name: 'China', weight: 30 },
+                    { name: 'India', weight: 25 },
+                    { name: 'Japan', weight: 10 },
+                    { name: 'South Korea', weight: 8 },
+                    { name: 'Indonesia', weight: 15 }
+                ],
+                Europe: [
+                    { name: 'Germany', weight: 15 },
+                    { name: 'France', weight: 12 },
+                    { name: 'Italy', weight: 10 },
+                    { name: 'Spain', weight: 10 },
+                    { name: 'United Kingdom', weight: 12 }
+                ],
+                'North America': [
+                    { name: 'USA', weight: 25 },
+                    { name: 'Canada', weight: 10 },
+                    { name: 'Mexico', weight: 15 },
+                    { name: 'Cuba', weight: 5 },
+                    { name: 'Jamaica', weight: 5 }
+                ],
+                'South America': [
+                    { name: 'Brazil', weight: 20 },
+                    { name: 'Argentina', weight: 10 },
+                    { name: 'Colombia', weight: 12 },
+                    { name: 'Peru', weight: 8 },
+                    { name: 'Chile', weight: 8 }
+                ],
+                Oceania: [
+                    { name: 'Australia', weight: 15 },
+                    { name: 'New Zealand', weight: 8 },
+                    { name: 'Fiji', weight: 5 },
+                    { name: 'Papua New Guinea', weight: 6 },
+                    { name: 'Samoa', weight: 4 }
+                ]
+            };
+            const ethnicities = {
+                Africa: ['Igbo', 'Yoruba', 'Zulu', 'Amhara', 'Oromo'],
+                Asia: ['Han Chinese', 'Bengali', 'Japanese', 'Korean', 'Tamil'],
+                Europe: ['German', 'French', 'Italian', 'Spanish', 'English'],
+                'North America': ['Native American', 'African American', 'Hispanic', 'Caucasian', 'Asian American'],
+                'South America': ['Mestizo', 'Indigenous', 'European Brazilian', 'Afro-Brazilian', 'Mulatto'],
+                Oceania: ['Aboriginal Australian', 'Māori', 'Polynesian', 'Melanesian', 'Micronesian']
+            };
+            const religions = [
+                { name: 'Christianity', weight: 31 }, // Based on global population percentages
+                { name: 'Islam', weight: 25 },
+                { name: 'Hinduism', weight: 15 },
+                { name: 'Buddhism', weight: 7 },
+                { name: 'Judaism', weight: 0.2 },
+                { name: 'Atheism', weight: 16 },
+                { name: 'Other', weight: 5.8 }
+            ];
+            const genders = ['Male', 'Female', 'Non-binary'];
+            const economicStatuses = [
+                { name: 'Poor', weight: 40 }, // Higher chance of being poor globally
+                { name: 'Lower Middle Class', weight: 30 },
+                { name: 'Middle Class', weight: 20 },
+                { name: 'Upper Middle Class', weight: 8 },
+                { name: 'Rich', weight: 2 }
+            ];
+            const fameLevels = [
+                { name: 'Unknown', weight: 90 }, // Most people are unknown
+                { name: 'Locally Known', weight: 7 },
+                { name: 'Nationally Known', weight: 2.5 },
+                { name: 'Internationally Known', weight: 0.5 }
+            ];
+            const languages = ['English', 'Mandarin', 'Hindi', 'Spanish', 'French', 'Arabic', 'Bengali', 'Portuguese', 'Russian', 'Japanese'];
+            const educationLevels = [
+                { name: 'No Formal Education', weight: 10 },
+                { name: 'Primary School', weight: 20 },
+                { name: 'Secondary School', weight: 30 },
+                { name: 'Bachelor\'s Degree', weight: 25 },
+                { name: 'Master\'s Degree', weight: 10 },
+                { name: 'PhD', weight: 5 }
+            ];
+            const familySizes = ['1 (Only Child)', '2', '3', '4', '5', '6+'];
+            const lifeExpectancies = [
+                { name: '50-60 years', weight: 10 }, // Lower life expectancy in poorer regions
+                { name: '60-70 years', weight: 20 },
+                { name: '70-80 years', weight: 40 },
+                { name: '80-90 years', weight: 25 },
+                { name: '90+ years', weight: 5 }
+            ];
+            const birthYears = Array.from({ length: 100 }, (_, i) => 1924 + i); // Birth years from 1924 to 2023
+            const heights = Array.from({ length: 100 }, (_, i) => 120 + i); // Heights from 120cm to 220cm
+            const weights = Array.from({ length: 100 }, (_, i) => 40 + i); // Weights from 40kg to 140kg
+            const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+            const occupations = ['Teacher', 'Engineer', 'Doctor', 'Artist', 'Farmer', 'Software Developer', 'Lawyer', 'Nurse', 'Chef', 'Entrepreneur'];
+            const hobbies = ['Reading', 'Traveling', 'Cooking', 'Sports', 'Music', 'Gaming', 'Photography', 'Dancing', 'Painting', 'Gardening'];
+            const personalityTraits = ['Introverted', 'Extroverted', 'Creative', 'Analytical', 'Empathetic', 'Adventurous', 'Organized', 'Spontaneous'];
+            const healthConditions = ['None', 'Asthma', 'Diabetes', 'Hypertension', 'Allergies', 'Arthritis', 'Depression', 'Anxiety'];
+
+            // Randomly select attributes
+            const randomContinent = continents[Math.floor(Math.random() * continents.length)];
+            const randomCountry = weightedRandom(
+                countries[randomContinent].map(c => c.name),
+                countries[randomContinent].map(c => c.weight)
+            );
+            const randomEthnicity = ethnicities[randomContinent][Math.floor(Math.random() * ethnicities[randomContinent].length)];
+            const randomReligion = weightedRandom(
+                religions.map(r => r.name),
+                religions.map(r => r.weight)
+            );
+            const randomGender = genders[Math.floor(Math.random() * genders.length)];
+            const randomEconomicStatus = weightedRandom(
+                economicStatuses.map(e => e.name),
+                economicStatuses.map(e => e.weight)
+            );
+            const randomFameLevel = weightedRandom(
+                fameLevels.map(f => f.name),
+                fameLevels.map(f => f.weight)
+            );
+            const randomLanguage = languages[Math.floor(Math.random() * languages.length)];
+            const randomEducationLevel = weightedRandom(
+                educationLevels.map(e => e.name),
+                educationLevels.map(e => e.weight)
+            );
+            const randomFamilySize = familySizes[Math.floor(Math.random() * familySizes.length)];
+            const randomLifeExpectancy = weightedRandom(
+                lifeExpectancies.map(l => l.name),
+                lifeExpectancies.map(l => l.weight)
+            );
+            const randomBirthYear = birthYears[Math.floor(Math.random() * birthYears.length)];
+            const randomHeight = heights[Math.floor(Math.random() * heights.length)];
+            const randomWeight = weights[Math.floor(Math.random() * weights.length)];
+            const randomBloodType = bloodTypes[Math.floor(Math.random() * bloodTypes.length)];
+            const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
+            const randomHobby = hobbies[Math.floor(Math.random() * hobbies.length)];
+            const randomPersonalityTrait = personalityTraits[Math.floor(Math.random() * personalityTraits.length)];
+            const randomHealthCondition = healthConditions[Math.floor(Math.random() * healthConditions.length)];
+
+            // Display the result
+            const result = `
+                <p><strong>Continent:</strong> ${randomContinent}</p>
+                <p><strong>Country:</strong> ${randomCountry}</p>
+                <p><strong>Ethnicity:</strong> ${randomEthnicity}</p>
+                <p><strong>Religion:</strong> ${randomReligion}</p>
+                <p><strong>Gender:</strong> ${randomGender}</p>
+                <p><strong>Economic Status:</strong> ${randomEconomicStatus}</p>
+                <p><strong>Fame Level:</strong> ${randomFameLevel}</p>
+                <p><strong>Language:</strong> ${randomLanguage}</p>
+                <p><strong>Education Level:</strong> ${randomEducationLevel}</p>
+                <p><strong>Family Size:</strong> ${randomFamilySize}</p>
+                <p><strong>Life Expectancy:</strong> ${randomLifeExpectancy}</p>
+                <p><strong>Birth Year:</strong> ${randomBirthYear}</p>
+                <p><strong>Height:</strong> ${randomHeight} cm</p>
+                <p><strong>Weight:</strong> ${randomWeight} kg</p>
+                <p><strong>Blood Type:</strong> ${randomBloodType}</p>
+                <p><strong>Occupation:</strong> ${randomOccupation}</p>
+                <p><strong>Hobby:</strong> ${randomHobby}</p>
+                <p><strong>Personality Trait:</strong> ${randomPersonalityTrait}</p>
+                <p><strong>Health Condition:</strong> ${randomHealthCondition}</p>
+            `;
+
+            document.getElementById('result').innerHTML = result;
+        });
+    </script>
+</body>
+</html>
