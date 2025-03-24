@@ -23,7 +23,7 @@
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
         }
 
@@ -42,6 +42,7 @@
             color: #fff;
             border-radius: 8px;
             transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         button:hover {
@@ -50,7 +51,7 @@
         }
 
         #result {
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 1.1rem;
             text-align: left;
             display: grid;
@@ -68,72 +69,189 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
+
+        .attribute {
+            font-weight: 600;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Born on Earth Simulator</h1>
-        <button id="generateButton">Generate</button>
+        <button id="generateButton">Generate New Person</button>
         <div id="result"></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Data for random generation
+            // Comprehensive data for generation
             const data = {
                 continents: ['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'],
+                
                 countries: {
                     Africa: [
                         { name: 'Nigeria', weight: 20 },
-                        { name: 'Egypt', weight: 10 },
-                        { name: 'South Africa', weight: 8 }
+                        { name: 'Egypt', weight: 12 },
+                        { name: 'South Africa', weight: 10 },
+                        { name: 'Ethiopia', weight: 8 },
+                        { name: 'DR Congo', weight: 7 },
+                        { name: 'Tanzania', weight: 6 },
+                        { name: 'Kenya', weight: 6 },
+                        { name: 'Algeria', weight: 5 }
                     ],
                     Asia: [
                         { name: 'China', weight: 30 },
-                        { name: 'India', weight: 25 },
-                        { name: 'Singapore', weight: 5 }
+                        { name: 'India', weight: 28 },
+                        { name: 'Indonesia', weight: 12 },
+                        { name: 'Pakistan', weight: 10 },
+                        { name: 'Japan', weight: 8 },
+                        { name: 'Philippines', weight: 8 },
+                        { name: 'Vietnam', weight: 7 },
+                        { name: 'Thailand', weight: 6 },
+                        { name: 'South Korea', weight: 6 },
+                        { name: 'Singapore', weight: 3 }
                     ],
                     Europe: [
                         { name: 'Germany', weight: 15 },
-                        { name: 'France', weight: 12 }
+                        { name: 'France', weight: 14 },
+                        { name: 'United Kingdom', weight: 14 },
+                        { name: 'Italy', weight: 13 },
+                        { name: 'Spain', weight: 12 },
+                        { name: 'Poland', weight: 8 },
+                        { name: 'Netherlands', weight: 6 },
+                        { name: 'Sweden', weight: 5 }
                     ],
                     'North America': [
-                        { name: 'USA', weight: 25 },
-                        { name: 'Canada', weight: 10 }
+                        { name: 'USA', weight: 30 },
+                        { name: 'Mexico', weight: 20 },
+                        { name: 'Canada', weight: 12 },
+                        { name: 'Guatemala', weight: 5 },
+                        { name: 'Cuba', weight: 4 }
                     ],
                     'South America': [
-                        { name: 'Brazil', weight: 20 },
-                        { name: 'Argentina', weight: 10 }
+                        { name: 'Brazil', weight: 25 },
+                        { name: 'Argentina', weight: 12 },
+                        { name: 'Colombia', weight: 12 },
+                        { name: 'Peru', weight: 8 },
+                        { name: 'Chile', weight: 7 }
                     ],
                     Oceania: [
-                        { name: 'Australia', weight: 15 },
-                        { name: 'New Zealand', weight: 8 }
+                        { name: 'Australia', weight: 20 },
+                        { name: 'New Zealand', weight: 10 },
+                        { name: 'Papua New Guinea', weight: 5 }
                     ]
                 },
-                ethnicities: {
-                    Africa: ['Igbo', 'Yoruba', 'Zulu'],
-                    Asia: ['Han Chinese', 'Bengali', 'Chinese Singaporean'],
-                    Europe: ['German', 'French', 'Italian'],
-                    'North America': ['Native American', 'African American'],
-                    'South America': ['Mestizo', 'Indigenous'],
-                    Oceania: ['Aboriginal Australian', 'Māori']
+
+                // Detailed religion weights by region
+                religions: {
+                    Africa: [
+                        { name: 'Christianity', weight: 49 },
+                        { name: 'Islam', weight: 42 },
+                        { name: 'Traditional African', weight: 8 },
+                        { name: 'Other', weight: 1 }
+                    ],
+                    Asia: [
+                        { name: 'Islam', weight: 25 },
+                        { name: 'Hinduism', weight: 25 },
+                        { name: 'Buddhism', weight: 12 },
+                        { name: 'Christianity', weight: 8 },
+                        { name: 'Unaffiliated', weight: 20 },
+                        { name: 'Other', weight: 10 }
+                    ],
+                    Europe: [
+                        { name: 'Christianity', weight: 72 },
+                        { name: 'Unaffiliated', weight: 24 },
+                        { name: 'Islam', weight: 3 },
+                        { name: 'Other', weight: 1 }
+                    ],
+                    'North America': [
+                        { name: 'Christianity', weight: 70 },
+                        { name: 'Unaffiliated', weight: 24 },
+                        { name: 'Judaism', weight: 2 },
+                        { name: 'Islam', weight: 1 },
+                        { name: 'Other', weight: 3 }
+                    ],
+                    'South America': [
+                        { name: 'Christianity', weight: 90 },
+                        { name: 'Unaffiliated', weight: 8 },
+                        { name: 'Other', weight: 2 }
+                    ],
+                    Oceania: [
+                        { name: 'Christianity', weight: 65 },
+                        { name: 'Unaffiliated', weight: 30 },
+                        { name: 'Other', weight: 5 }
+                    ]
                 },
-                religions: [
-                    { name: 'Christianity', weight: 31 },
-                    { name: 'Islam', weight: 25 },
-                    { name: 'Hinduism', weight: 15 }
+
+                // Singapore-specific data
+                singaporeData: {
+                    religions: [
+                        { name: 'Buddhism', weight: 33 },
+                        { name: 'Christianity', weight: 18 },
+                        { name: 'Islam', weight: 15 },
+                        { name: 'Taoism', weight: 11 },
+                        { name: 'Hinduism', weight: 5 },
+                        { name: 'Unaffiliated', weight: 18 }
+                    ],
+                    occupations: [
+                        { name: 'Banker', weight: 8 },
+                        { name: 'Software Engineer', weight: 12 },
+                        { name: 'Civil Servant', weight: 10 },
+                        { name: 'Teacher', weight: 9 },
+                        { name: 'Doctor', weight: 6 },
+                        { name: 'Hawker', weight: 5 },
+                        { name: 'Entrepreneur', weight: 7 }
+                    ],
+                    hobbies: [
+                        { name: 'Eating at Hawker Centers', weight: 25 },
+                        { name: 'Shopping', weight: 20 },
+                        { name: 'Hiking', weight: 15 },
+                        { name: 'Visiting Gardens by the Bay', weight: 10 }
+                    ]
+                },
+
+                // Other attributes
+                genders: [
+                    { name: 'Male', weight: 49 },
+                    { name: 'Female', weight: 49 },
+                    { name: 'Non-binary', weight: 2 }
                 ],
-                genders: ['Male', 'Female', 'Non-binary'],
+                
                 economicStatuses: [
                     { name: 'Poor', weight: 40 },
-                    { name: 'Middle Class', weight: 30 },
-                    { name: 'Rich', weight: 5 }
+                    { name: 'Lower Middle Class', weight: 30 },
+                    { name: 'Middle Class', weight: 20 },
+                    { name: 'Upper Middle Class', weight: 8 },
+                    { name: 'Rich', weight: 2 }
                 ],
-                occupations: ['Teacher', 'Engineer', 'Doctor'],
-                singaporeOccupations: ['Banker', 'Civil Servant', 'Hawker'],
-                hobbies: ['Reading', 'Sports', 'Music'],
-                singaporeHobbies: ['Hawker Centers', 'Gardens by the Bay'],
-                languages: ['English', 'Mandarin', 'Spanish']
+                
+                educationLevels: [
+                    { name: 'No Formal Education', weight: 10 },
+                    { name: 'Primary School', weight: 20 },
+                    { name: 'Secondary School', weight: 30 },
+                    { name: "Bachelor's Degree", weight: 25 },
+                    { name: "Master's Degree", weight: 10 },
+                    { name: 'PhD', weight: 5 }
+                ],
+                
+                maritalStatuses: [
+                    { name: 'Single', weight: 40 },
+                    { name: 'Married', weight: 50 },
+                    { name: 'Divorced', weight: 8 },
+                    { name: 'Widowed', weight: 2 }
+                ],
+                
+                bloodTypes: [
+                    { name: 'O+', weight: 37 },
+                    { name: 'A+', weight: 28 },
+                    { name: 'B+', weight: 20 },
+                    { name: 'AB+', weight: 5 },
+                    { name: 'O-', weight: 7 },
+                    { name: 'A-', weight: 6 },
+                    { name: 'B-', weight: 2 },
+                    { name: 'AB-', weight: 1 }
+                ]
             };
 
             // Helper function for weighted random selection
@@ -143,44 +261,84 @@
                 
                 for (const item of items) {
                     if (random < (item.weight || 1)) {
-                        return item.name || item;
+                        return item;
                     }
                     random -= (item.weight || 1);
                 }
                 
-                return items[0].name || items[0];
+                return items[0];
+            }
+
+            // Generate random age-based attributes
+            function generateAgeAttributes(age) {
+                const ageGroup = age < 18 ? 'child' : age < 30 ? 'young adult' : age < 60 ? 'adult' : 'senior';
+                
+                const attributes = {
+                    child: {
+                        occupation: 'Student',
+                        maritalStatus: 'Single',
+                        children: '0'
+                    },
+                    'young adult': {
+                        maritalStatus: getWeightedRandom([
+                            { name: 'Single', weight: 70 },
+                            { name: 'Married', weight: 30 }
+                        ]).name,
+                        children: Math.random() > 0.7 ? '1' : '0'
+                    },
+                    adult: {
+                        maritalStatus: getWeightedRandom(data.maritalStatuses).name,
+                        children: ['0', '1', '2', '3+'][Math.floor(Math.random() * 4)]
+                    },
+                    senior: {
+                        maritalStatus: getWeightedRandom([
+                            { name: 'Married', weight: 60 },
+                            { name: 'Widowed', weight: 30 },
+                            { name: 'Divorced', weight: 10 }
+                        ]).name,
+                        children: ['1', '2', '3+'][Math.floor(Math.random() * 3)]
+                    }
+                };
+                
+                return attributes[ageGroup];
             }
 
             // Generate a new person
             function generatePerson() {
                 const continent = data.continents[Math.floor(Math.random() * data.continents.length)];
-                const countryData = data.countries[continent];
-                const country = getWeightedRandom(countryData);
+                const country = getWeightedRandom(data.countries[continent]);
+                const isSingapore = country.name === 'Singapore';
                 
-                // Special handling for Singapore
-                const isSingapore = country === 'Singapore';
-                const ethnicityOptions = isSingapore ? 
-                    ['Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean'] : 
-                    data.ethnicities[continent];
+                // Age between 1 and 100 years
+                const age = Math.floor(Math.random() * 100) + 1;
+                const ageAttributes = generateAgeAttributes(age);
                 
-                const occupationOptions = isSingapore ? 
-                    data.singaporeOccupations : data.occupations;
-                
-                const hobbyOptions = isSingapore ? 
-                    data.singaporeHobbies : data.hobbies;
-
+                // Generate person object
                 const person = {
                     continent,
-                    country,
-                    ethnicity: ethnicityOptions[Math.floor(Math.random() * ethnicityOptions.length)],
-                    religion: getWeightedRandom(data.religions),
-                    gender: data.genders[Math.floor(Math.random() * data.genders.length)],
-                    economicStatus: getWeightedRandom(data.economicStatuses),
-                    occupation: occupationOptions[Math.floor(Math.random() * occupationOptions.length)],
-                    hobby: hobbyOptions[Math.floor(Math.random() * hobbyOptions.length)],
-                    language: data.languages[Math.floor(Math.random() * data.languages.length)],
-                    height: Math.floor(Math.random() * 60) + 150, // 150-210cm
-                    weight: Math.floor(Math.random() * 70) + 50   // 50-120kg
+                    country: country.name,
+                    age,
+                    ethnicity: getWeightedRandom(data.ethnicities[continent]).name,
+                    religion: getWeightedRandom(isSingapore ? 
+                        data.singaporeData.religions : data.religions[continent]).name,
+                    gender: getWeightedRandom(data.genders).name,
+                    economicStatus: getWeightedRandom(data.economicStatuses).name,
+                    education: getWeightedRandom(data.educationLevels).name,
+                    occupation: isSingapore ? 
+                        getWeightedRandom(data.singaporeData.occupations).name : 
+                        ageAttributes.occupation || 'Unemployed',
+                    hobby: isSingapore ? 
+                        getWeightedRandom(data.singaporeData.hobbies).name : 
+                        ['Reading', 'Sports', 'Music', 'Traveling'][Math.floor(Math.random() * 4)],
+                    maritalStatus: ageAttributes.maritalStatus,
+                    children: ageAttributes.children,
+                    bloodType: getWeightedRandom(data.bloodTypes).name,
+                    height: Math.floor(Math.random() * 60) + 140, // 140-200cm
+                    weight: Math.floor(Math.random() * 70) + 40,   // 40-110kg
+                    generation: age < 25 ? 'Gen Z' : 
+                              age < 41 ? 'Millennial' : 
+                              age < 57 ? 'Gen X' : 
+                              'Boomer+'
                 };
 
                 return person;
@@ -190,17 +348,21 @@
             function displayPerson(person) {
                 const resultDiv = document.getElementById('result');
                 resultDiv.innerHTML = `
-                    <p><strong>Continent:</strong> ${person.continent}</p>
-                    <p><strong>Country:</strong> ${person.country}</p>
-                    <p><strong>Ethnicity:</strong> ${person.ethnicity}</p>
-                    <p><strong>Religion:</strong> ${person.religion}</p>
-                    <p><strong>Gender:</strong> ${person.gender}</p>
-                    <p><strong>Economic Status:</strong> ${person.economicStatus}</p>
-                    <p><strong>Occupation:</strong> ${person.occupation}</p>
-                    <p><strong>Hobby:</strong> ${person.hobby}</p>
-                    <p><strong>Language:</strong> ${person.language}</p>
-                    <p><strong>Height:</strong> ${person.height} cm</p>
-                    <p><strong>Weight:</strong> ${person.weight} kg</p>
+                    <p><span class="attribute">Continent:</span> ${person.continent}</p>
+                    <p><span class="attribute">Country:</span> ${person.country}</p>
+                    <p><span class="attribute">Age:</span> ${person.age} (${person.generation})</p>
+                    <p><span class="attribute">Ethnicity:</span> ${person.ethnicity}</p>
+                    <p><span class="attribute">Religion:</span> ${person.religion}</p>
+                    <p><span class="attribute">Gender:</span> ${person.gender}</p>
+                    <p><span class="attribute">Economic Status:</span> ${person.economicStatus}</p>
+                    <p><span class="attribute">Education:</span> ${person.education}</p>
+                    <p><span class="attribute">Occupation:</span> ${person.occupation}</p>
+                    <p><span class="attribute">Marital Status:</span> ${person.maritalStatus}</p>
+                    <p><span class="attribute">Children:</span> ${person.children}</p>
+                    <p><span class="attribute">Hobby:</span> ${person.hobby}</p>
+                    <p><span class="attribute">Blood Type:</span> ${person.bloodType}</p>
+                    <p><span class="attribute">Height:</span> ${person.height} cm</p>
+                    <p><span class="attribute">Weight:</span> ${person.weight} kg</p>
                 `;
             }
 
