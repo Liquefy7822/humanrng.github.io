@@ -4,54 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Born on Earth Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: #333;
         }
 
         .container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
+            animation: fadeIn 1s ease-in-out;
         }
 
         h1 {
             margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #007bff;
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 24px;
+            font-size: 1rem;
             cursor: pointer;
             border: none;
             background-color: #007bff;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
 
         #result {
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: 30px;
+            font-size: 1.1rem;
             text-align: left;
-            display: inline-block;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
         }
 
         #result p {
             margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -82,7 +106,7 @@
             const continents = ['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania'];
             const countries = {
                 Africa: [
-                    { name: 'Nigeria', weight: 20 }, // More populous countries have higher weights
+                    { name: 'Nigeria', weight: 20 },
                     { name: 'Egypt', weight: 10 },
                     { name: 'South Africa', weight: 8 },
                     { name: 'Kenya', weight: 6 },
@@ -93,7 +117,8 @@
                     { name: 'India', weight: 25 },
                     { name: 'Japan', weight: 10 },
                     { name: 'South Korea', weight: 8 },
-                    { name: 'Indonesia', weight: 15 }
+                    { name: 'Indonesia', weight: 15 },
+                    { name: 'Singapore', weight: 5 }  // Added Singapore
                 ],
                 Europe: [
                     { name: 'Germany', weight: 15 },
@@ -126,60 +151,33 @@
             };
             const ethnicities = {
                 Africa: ['Igbo', 'Yoruba', 'Zulu', 'Amhara', 'Oromo'],
-                Asia: ['Han Chinese', 'Bengali', 'Japanese', 'Korean', 'Tamil'],
+                Asia: ['Han Chinese', 'Bengali', 'Japanese', 'Korean', 'Tamil', 
+                      'Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean', 'Eurasian Singaporean'],  // Added Singaporean ethnicities
                 Europe: ['German', 'French', 'Italian', 'Spanish', 'English'],
                 'North America': ['Native American', 'African American', 'Hispanic', 'Caucasian', 'Asian American'],
                 'South America': ['Mestizo', 'Indigenous', 'European Brazilian', 'Afro-Brazilian', 'Mulatto'],
                 Oceania: ['Aboriginal Australian', 'Māori', 'Polynesian', 'Melanesian', 'Micronesian']
             };
             const religions = [
-                { name: 'Christianity', weight: 31 }, // Based on global population percentages
+                { name: 'Christianity', weight: 31 },
                 { name: 'Islam', weight: 25 },
                 { name: 'Hinduism', weight: 15 },
                 { name: 'Buddhism', weight: 7 },
                 { name: 'Judaism', weight: 0.2 },
                 { name: 'Atheism', weight: 16 },
-                { name: 'Other', weight: 5.8 }
+                { name: 'Other', weight: 5.8 },
+                { name: 'Taoism', weight: 3 }  // Added Taoism (common in Singapore)
             ];
-            const genders = ['Male', 'Female', 'Non-binary'];
-            const economicStatuses = [
-                { name: 'Poor', weight: 40 }, // Higher chance of being poor globally
-                { name: 'Lower Middle Class', weight: 30 },
-                { name: 'Middle Class', weight: 20 },
-                { name: 'Upper Middle Class', weight: 8 },
-                { name: 'Rich', weight: 2 }
-            ];
-            const fameLevels = [
-                { name: 'Unknown', weight: 90 }, // Most people are unknown
-                { name: 'Locally Known', weight: 7 },
-                { name: 'Nationally Known', weight: 2.5 },
-                { name: 'Internationally Known', weight: 0.5 }
-            ];
-            const languages = ['English', 'Mandarin', 'Hindi', 'Spanish', 'French', 'Arabic', 'Bengali', 'Portuguese', 'Russian', 'Japanese'];
-            const educationLevels = [
-                { name: 'No Formal Education', weight: 10 },
-                { name: 'Primary School', weight: 20 },
-                { name: 'Secondary School', weight: 30 },
-                { name: 'Bachelor\'s Degree', weight: 25 },
-                { name: 'Master\'s Degree', weight: 10 },
-                { name: 'PhD', weight: 5 }
-            ];
-            const familySizes = ['1 (Only Child)', '2', '3', '4', '5', '6+'];
-            const lifeExpectancies = [
-                { name: '50-60 years', weight: 10 }, // Lower life expectancy in poorer regions
-                { name: '60-70 years', weight: 20 },
-                { name: '70-80 years', weight: 40 },
-                { name: '80-90 years', weight: 25 },
-                { name: '90+ years', weight: 5 }
-            ];
-            const birthYears = Array.from({ length: 100 }, (_, i) => 1924 + i); // Birth years from 1924 to 2023
-            const heights = Array.from({ length: 100 }, (_, i) => 120 + i); // Heights from 120cm to 220cm
-            const weights = Array.from({ length: 100 }, (_, i) => 40 + i); // Weights from 40kg to 140kg
-            const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-            const occupations = ['Teacher', 'Engineer', 'Doctor', 'Artist', 'Farmer', 'Software Developer', 'Lawyer', 'Nurse', 'Chef', 'Entrepreneur'];
-            const hobbies = ['Reading', 'Traveling', 'Cooking', 'Sports', 'Music', 'Gaming', 'Photography', 'Dancing', 'Painting', 'Gardening'];
-            const personalityTraits = ['Introverted', 'Extroverted', 'Creative', 'Analytical', 'Empathetic', 'Adventurous', 'Organized', 'Spontaneous'];
-            const healthConditions = ['None', 'Asthma', 'Diabetes', 'Hypertension', 'Allergies', 'Arthritis', 'Depression', 'Anxiety'];
+            const languages = ['English', 'Mandarin', 'Hindi', 'Spanish', 'French', 'Arabic', 
+                             'Bengali', 'Portuguese', 'Russian', 'Japanese', 'Malay', 'Tamil'];  // Added Malay and Tamil
+            const singaporeSpecific = {
+                occupations: ['Banker', 'Software Engineer', 'Civil Servant', 'Teacher', 'Doctor', 
+                            'Hawker', 'Entrepreneur', 'Pilot', 'Nurse', 'Architect'],
+                hobbies: ['Eating at Hawker Centers', 'Shopping at Orchard Road', 'Hiking at Bukit Timah', 
+                         'Visiting Gardens by the Bay', 'Playing Mobile Games'],
+                favoriteFoods: ['Chicken Rice', 'Laksa', 'Chilli Crab', 'Hainanese Curry Rice', 
+                               'Satay', 'Roti Prata', 'Bak Kut Teh', 'Ice Kacang']
+            };
 
             // Randomly select attributes
             const randomContinent = continents[Math.floor(Math.random() * continents.length)];
@@ -187,7 +185,24 @@
                 countries[randomContinent].map(c => c.name),
                 countries[randomContinent].map(c => c.weight)
             );
-            const randomEthnicity = ethnicities[randomContinent][Math.floor(Math.random() * ethnicities[randomContinent].length)];
+            
+            // Special handling for Singapore
+            let randomEthnicity, randomOccupation, randomHobby, randomFavoriteFood;
+            if (randomCountry === 'Singapore') {
+                randomEthnicity = weightedRandom(
+                    ['Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean', 'Eurasian Singaporean'],
+                    [74, 13, 9, 4]  // Rough percentages of ethnic groups in Singapore
+                );
+                randomOccupation = singaporeSpecific.occupations[Math.floor(Math.random() * singaporeSpecific.occupations.length)];
+                randomHobby = singaporeSpecific.hobbies[Math.floor(Math.random() * singaporeSpecific.hobbies.length)];
+                randomFavoriteFood = singaporeSpecific.favoriteFoods[Math.floor(Math.random() * singaporeSpecific.favoriteFoods.length)];
+            } else {
+                randomEthnicity = ethnicities[randomContinent][Math.floor(Math.random() * ethnicities[randomContinent].length)];
+                randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
+                randomHobby = hobbies[Math.floor(Math.random() * hobbies.length)];
+                randomFavoriteFood = favoriteFoods[Math.floor(Math.random() * favoriteFoods.length)];
+            }
+
             const randomReligion = weightedRandom(
                 religions.map(r => r.name),
                 religions.map(r => r.weight)
@@ -215,10 +230,11 @@
             const randomHeight = heights[Math.floor(Math.random() * heights.length)];
             const randomWeight = weights[Math.floor(Math.random() * weights.length)];
             const randomBloodType = bloodTypes[Math.floor(Math.random() * bloodTypes.length)];
-            const randomOccupation = occupations[Math.floor(Math.random() * occupations.length)];
-            const randomHobby = hobbies[Math.floor(Math.random() * hobbies.length)];
             const randomPersonalityTrait = personalityTraits[Math.floor(Math.random() * personalityTraits.length)];
             const randomHealthCondition = healthConditions[Math.floor(Math.random() * healthConditions.length)];
+            const randomMaritalStatus = maritalStatuses[Math.floor(Math.random() * maritalStatuses.length)];
+            const randomNumberOfChildren = numberOfChildren[Math.floor(Math.random() * numberOfChildren.length)];
+            const randomPoliticalView = politicalViews[Math.floor(Math.random() * politicalViews.length)];
 
             // Display the result
             const result = `
@@ -241,6 +257,10 @@
                 <p><strong>Hobby:</strong> ${randomHobby}</p>
                 <p><strong>Personality Trait:</strong> ${randomPersonalityTrait}</p>
                 <p><strong>Health Condition:</strong> ${randomHealthCondition}</p>
+                <p><strong>Marital Status:</strong> ${randomMaritalStatus}</p>
+                <p><strong>Number of Children:</strong> ${randomNumberOfChildren}</p>
+                <p><strong>Political View:</strong> ${randomPoliticalView}</p>
+                <p><strong>Favorite Food:</strong> ${randomFavoriteFood}</p>
             `;
 
             document.getElementById('result').innerHTML = result;
