@@ -118,7 +118,7 @@
                     { name: 'Japan', weight: 10 },
                     { name: 'South Korea', weight: 8 },
                     { name: 'Indonesia', weight: 15 },
-                    { name: 'Singapore', weight: 5 }  // Added Singapore
+                    { name: 'Singapore', weight: 5 }
                 ],
                 Europe: [
                     { name: 'Germany', weight: 15 },
@@ -152,7 +152,7 @@
             const ethnicities = {
                 Africa: ['Igbo', 'Yoruba', 'Zulu', 'Amhara', 'Oromo'],
                 Asia: ['Han Chinese', 'Bengali', 'Japanese', 'Korean', 'Tamil', 
-                      'Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean', 'Eurasian Singaporean'],  // Added Singaporean ethnicities
+                      'Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean', 'Eurasian Singaporean'],
                 Europe: ['German', 'French', 'Italian', 'Spanish', 'English'],
                 'North America': ['Native American', 'African American', 'Hispanic', 'Caucasian', 'Asian American'],
                 'South America': ['Mestizo', 'Indigenous', 'European Brazilian', 'Afro-Brazilian', 'Mulatto'],
@@ -166,10 +166,54 @@
                 { name: 'Judaism', weight: 0.2 },
                 { name: 'Atheism', weight: 16 },
                 { name: 'Other', weight: 5.8 },
-                { name: 'Taoism', weight: 3 }  // Added Taoism (common in Singapore)
+                { name: 'Taoism', weight: 3 }
+            ];
+            const genders = ['Male', 'Female', 'Non-binary'];
+            const economicStatuses = [
+                { name: 'Poor', weight: 40 },
+                { name: 'Lower Middle Class', weight: 30 },
+                { name: 'Middle Class', weight: 20 },
+                { name: 'Upper Middle Class', weight: 8 },
+                { name: 'Rich', weight: 2 }
+            ];
+            const fameLevels = [
+                { name: 'Unknown', weight: 90 },
+                { name: 'Locally Known', weight: 7 },
+                { name: 'Nationally Known', weight: 2.5 },
+                { name: 'Internationally Known', weight: 0.5 }
             ];
             const languages = ['English', 'Mandarin', 'Hindi', 'Spanish', 'French', 'Arabic', 
-                             'Bengali', 'Portuguese', 'Russian', 'Japanese', 'Malay', 'Tamil'];  // Added Malay and Tamil
+                             'Bengali', 'Portuguese', 'Russian', 'Japanese', 'Malay', 'Tamil'];
+            const educationLevels = [
+                { name: 'No Formal Education', weight: 10 },
+                { name: 'Primary School', weight: 20 },
+                { name: 'Secondary School', weight: 30 },
+                { name: 'Bachelor\'s Degree', weight: 25 },
+                { name: 'Master\'s Degree', weight: 10 },
+                { name: 'PhD', weight: 5 }
+            ];
+            const familySizes = ['1 (Only Child)', '2', '3', '4', '5', '6+'];
+            const lifeExpectancies = [
+                { name: '50-60 years', weight: 10 },
+                { name: '60-70 years', weight: 20 },
+                { name: '70-80 years', weight: 40 },
+                { name: '80-90 years', weight: 25 },
+                { name: '90+ years', weight: 5 }
+            ];
+            const birthYears = Array.from({ length: 100 }, (_, i) => 1924 + i);
+            const heights = Array.from({ length: 100 }, (_, i) => 120 + i);
+            const weights = Array.from({ length: 100 }, (_, i) => 40 + i);
+            const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+            const occupations = ['Teacher', 'Engineer', 'Doctor', 'Artist', 'Farmer', 'Software Developer', 'Lawyer', 'Nurse', 'Chef', 'Entrepreneur'];
+            const hobbies = ['Reading', 'Traveling', 'Cooking', 'Sports', 'Music', 'Gaming', 'Photography', 'Dancing', 'Painting', 'Gardening'];
+            const personalityTraits = ['Introverted', 'Extroverted', 'Creative', 'Analytical', 'Empathetic', 'Adventurous', 'Organized', 'Spontaneous'];
+            const healthConditions = ['None', 'Asthma', 'Diabetes', 'Hypertension', 'Allergies', 'Arthritis', 'Depression', 'Anxiety'];
+            const maritalStatuses = ['Single', 'Married', 'Divorced', 'Widowed'];
+            const numberOfChildren = ['0', '1', '2', '3', '4+'];
+            const politicalViews = ['Liberal', 'Conservative', 'Moderate', 'Apolitical'];
+            const favoriteFoods = ['Pizza', 'Sushi', 'Pasta', 'Curry', 'Tacos', 'Burger', 'Steak', 'Salad', 'Soup', 'Dessert'];
+            
+            // Singapore-specific data
             const singaporeSpecific = {
                 occupations: ['Banker', 'Software Engineer', 'Civil Servant', 'Teacher', 'Doctor', 
                             'Hawker', 'Entrepreneur', 'Pilot', 'Nurse', 'Architect'],
@@ -191,7 +235,7 @@
             if (randomCountry === 'Singapore') {
                 randomEthnicity = weightedRandom(
                     ['Chinese Singaporean', 'Malay Singaporean', 'Indian Singaporean', 'Eurasian Singaporean'],
-                    [74, 13, 9, 4]  // Rough percentages of ethnic groups in Singapore
+                    [74, 13, 9, 4]
                 );
                 randomOccupation = singaporeSpecific.occupations[Math.floor(Math.random() * singaporeSpecific.occupations.length)];
                 randomHobby = singaporeSpecific.hobbies[Math.floor(Math.random() * singaporeSpecific.hobbies.length)];
